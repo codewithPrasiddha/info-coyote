@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coyote 103 – Sarnia’s Country</title>
+  <meta name="description" content="Coyote 103 – Sarnia’s Country. Listen live, check the Top 10, browse concert listings, read the latest news and interviews, and see the on‑air lineup." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1115;           /* deep slate */
+      --panel:#151924;        /* card surface */
+      --muted:#a7b0c0;        /* text muted */
+      --text:#eaf0ff;         /* text bright */
+      --accent:#ff9a1f;       /* coyote orange */
+      --accent-2:#27c2a8;     /* teal pop */
+      --border:#232838;       /* subtle borders */
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1000px 600px at 120% -10%, rgba(255,154,31,.08), transparent),
+                         radial-gradient(900px 500px at -10% 0%, rgba(39,194,168,.06), transparent),
+                         var(--bg);
+      color:var(--text); font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto; letter-spacing:.2px;
+    }
+    h1,h2,h3{font-family:Barlow, Inter, system-ui; letter-spacing:.4px}
+    h1{font-size:clamp(2.2rem, 4vw + .5rem, 4rem); margin:.2rem 0}
+    h2{font-size:clamp(1.4rem, 1.6vw + .5rem, 2rem); margin:0 0 1rem}
+    h3{font-size:1.1rem; margin:.6rem 0}
+    a{color:var(--accent)}
+    .container{width:min(1200px, 92%); margin-inline:auto}
+
+    /* Header / Nav */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--border); background:rgba(15,17,21,.7)}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 0}
+    .brand{display:flex; align-items:center; gap:.8rem; text-decoration:none}
+    .logo{
+      width:44px; height:44px; border-radius:12px; background:
+        conic-gradient(from 210deg at 70% 30%, rgba(255,154,31,.4), transparent 30%),
+        conic-gradient(from 40deg at 20% 80%, rgba(39,194,168,.35), transparent 40%),
+        linear-gradient(145deg, #1b1f2a, #0c0e12);
+      border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden;
+    }
+    .logo::after{content:""; position:absolute; inset:6px; border-radius:10px; border:1px solid #2b3145}
+    .brand-name{font:800 1.1rem/1 Barlow; letter-spacing:.6px; color:var(--text)}
+    .brand-sub{display:block; font:600 .7rem/1 Barlow; color:var(--muted); opacity:.9; margin-top:.2rem}
+    nav ul{list-style:none; display:flex; gap:.6rem; margin:0; padding:0; align-items:center}
+    nav a{display:inline-block; padding:.55rem .9rem; border-radius:999px; text-decoration:none; color:var(--text); border:1px solid transparent}
+    nav a:hover{background:#1a1f2b; border-color:#2a3042}
+    .hamburger{display:none; background:none; border:1px solid var(--border); border-radius:10px; padding:.5rem .6rem; color:var(--text)}
+
+    /* Hero */
+    .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--border)}
+    .hero-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:2.2rem; align-items:center; padding:clamp(1.2rem, 3vw, 2rem) 0}
+    .hero-visual{
+      position:relative; min-height:360px; border-radius:var(--radius);
+      background:linear-gradient(120deg, rgba(255,154,31,.15), rgba(39,194,168,.1)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
+      box-shadow:var(--shadow); border:1px solid var(--border);
+    }
+    .hero-visual::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%) }
+    .listen-cta{display:flex; gap:1rem; flex-wrap:wrap; align-items:center}
+    .btn{
+      appearance:none; border:none; padding:.9rem 1.1rem; border-radius:14px; cursor:pointer;
+      font:700 .95rem/1 Barlow; letter-spacing:.4px; color:#0a0c10; background:linear-gradient(170deg, var(--accent), #ff7b00);
+      box-shadow:0 8px 18px rgba(255,154,31,.35), inset 0 1px 0 rgba(255,255,255,.35)
+    }
+    .btn.secondary{color:var(--text); background:linear-gradient(170deg, #232a3b, #191e2b); border:1px solid #2a3042}
+    .cta-sub{color:var(--muted); font-size:.95rem}
+
+    /* Rotating cards */
+    .rotator{display:grid; gap:1rem; grid-template-columns:repeat(2,1fr)}
+    .rot-card{background:linear-gradient(160deg, #192033, #121723); border:1px solid var(--border); border-radius:16px; padding:1rem; box-shadow:var(--shadow)}
+    .rot-title{display:flex; align-items:center; gap:.6rem; font-weight:800; font-family:Barlow}
+    .rot-title .dot{width:9px; height:9px; border-radius:50%; background:var(--accent)}
+    .rot-desc{color:var(--muted); font-size:.95rem}
+
+    /* Blocks */
+    section{padding:clamp(2rem, 6vw, 4rem) 0}
+    .panel{background:linear-gradient(170deg, #171b27, #121622); border:1px solid var(--border); border-radius:var(--radius); padding:clamp(1rem, 2vw, 1.5rem); box-shadow:var(--shadow)}
+    .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:1rem}
+    .section-head .muted{color:var(--muted); font-size:.95rem}
+
+    /* Top 10 */
+    .chart-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:1rem}
+    .chart-card{position:relative; overflow:hidden; border-radius:16px; border:1px solid var(--border); background:#0e121a}
+    .chart-card img{width:100%; height:140px; object-fit:cover; display:block}
+    .chart-meta{padding:.7rem}
+    .chart-meta .rank{font:800 .9rem/1 Barlow; color:var(--accent)}
+    .chart-meta .title{font-weight:700}
+    .chart-meta .artist{color:var(--muted); font-size:.9rem}
+
+    /* Concerts */
+    .filters{display:flex; gap:.6rem; flex-wrap:wrap}
+    .filter{background:#161b28; border:1px solid var(--border); color:var(--text); padding:.5rem .8rem; border-radius:10px; cursor:pointer}
+    .filter.active{background:#1e2638; border-color:#32405e}
+    .concerts-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1rem}
+    .concert-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420}
+    .concert-card img{width:100%; height:160px; object-fit:cover}
+    .concert-body{padding:1rem}
+    .concert-body .date{font:800 .9rem/1 Barlow; color:var(--accent)}
+    .concert-body .venue{color:var(--muted)}
+    .concert-body .buy{display:inline-block; margin-top:.6rem; padding:.5rem .7rem; border:1px solid #334261; border-radius:10px; color:var(--text); text-decoration:none}
+
+    /* News */
+    .news-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1rem}
+    .news-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420}
+    .news-card img{width:100%; height:180px; object-fit:cover}
+    .news-body{padding:1rem}
+    .tags{display:flex; gap:.4rem; flex-wrap:wrap; margin:.4rem 0}
+    .tag{font:700 .7rem/1 Barlow; padding:.25rem .5rem; border-radius:999px; border:1px solid #2c3956; color:#c9d5f8}
+
+    /* On-Air */
+    .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:1rem}
+    .schedule{display:grid; grid-template-columns:repeat(7, 1fr); gap:.6rem}
+    .day{background:#0f1420; border:1px solid var(--border); border-radius:12px; padding:.6rem}
+    .day h4{margin:.2rem 0 .5rem; font-family:Barlow; font-size:.95rem}
+    .slot{padding:.35rem .45rem; border-radius:8px; margin:.35rem 0; background:#171d2c; border:1px solid #283552}
+
+    .shows{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:1rem}
+    .show-card{border:1px solid var(--border); border-radius:16px; padding:1rem; background:#0f1420}
+
+    /* Contact */
+    form .row{display:grid; grid-template-columns:repeat(2, 1fr); gap:.8rem}
+    label{display:block; font-size:.9rem; color:#cfd7ee; margin:.3rem 0}
+    input, textarea{width:100%; background:#0e1320; border:1px solid #2a3042; color:var(--text); padding:.7rem .8rem; border-radius:10px}
+    textarea{min-height:120px}
+    .map{border:0; width:100%; height:260px; border-radius:12px}
+
+    /* Footer */
+    footer{border-top:1px solid var(--border); background:#0c0f15; padding:1.5rem 0; color:var(--muted)}
+
+    /* Sticky bottom player */
+    .player{position:fixed; left:50%; transform:translateX(-50%); bottom:16px; width:min(1000px, 96%); background:linear-gradient(170deg, #141a28, #101521); border:1px solid var(--border); border-radius:16px; padding:.6rem .8rem; display:flex; align-items:center; gap:.8rem; z-index:60; box-shadow:var(--shadow)}
+    .player .btn{padding:.6rem .9rem}
+    .player .now{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#cbd7f7}
+
+    /* Floating Listen Live */
+    .listen-fab{position:fixed; right:16px; bottom:90px; z-index:61}
+    .listen-fab .btn{box-shadow:0 14px 30px rgba(255,154,31,.35)}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .grid, .hero-wrap{grid-template-columns:1fr}
+      .rotator{grid-template-columns:1fr}
+      .schedule{grid-template-columns:repeat(3, 1fr)}
+      form .row{grid-template-columns:1fr}
+      nav ul{display:none}
+      .hamburger{display:block}
+      nav.open ul{display:flex; position:absolute; top:60px; right:2%; background:#0e1320; border:1px solid var(--border); border-radius:14px; padding:.4rem; flex-direction:column; box-shadow:var(--shadow)}
+      nav.open a{padding:.6rem 1rem}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="Coyote 103 Home">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <span class="brand-name">Coyote 103</span>
+          <span class="brand-sub">Sarnia’s Country</span>
+        </div>
+      </a>
+      <nav id="siteNav">
+        <button class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('siteNav').classList.toggle('open')">☰</button>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#concerts">Concert Listings</a></li>
+          <li><a href="#news">News</a></li>
+          <li><a href="#onair">On‑Air Lineup</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO / HOME -->
+  <main id="home" class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <h1>Turn it up. <span style="color:var(--accent)">Listen live</span> to Sarnia’s Country.</h1>
+        <p class="cta-sub">Hit the orange button to start the stream. Explore the Top 10, concerts around town, fresh interviews, and our weekly lineup.</p>
+        <div class="listen-cta">
+          <button class="btn" id="heroListen">▶︎ Listen Live</button>
+          <a class="btn secondary" href="#top10">See Top 10</a>
+        </div>
+      </div>
+
+      <div class="hero-visual panel">
+        <div class="rotator" id="rotator" aria-live="polite" style="position:absolute; inset:auto 1rem 1rem 1rem">
+          <!-- Rotating info cards injected by JS -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TOP 10 -->
+  <section id="top10">
+    <div class="container">
+      <div class="section-head">
+        <h2>Top 10 – <span id="chartDate">Loading…</span></h2>
+        <a href="#top10" class="muted">See full chart →</a>
+      </div>
+      <div class="panel">
+        <div class="chart-grid" id="chartGrid" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONCERT LISTINGS -->
+  <section id="concerts">
+    <div class="container">
+      <div class="section-head">
+        <h2>Concert Listings</h2>
+        <div class="filters">
+          <select id="monthFilter" class="filter" aria-label="Filter by month"></select>
+          <select id="venueFilter" class="filter" aria-label="Filter by venue"></select>
+          <button class="filter" id="clearFilters">Clear</button>
+        </div>
+      </div>
+      <div class="concerts-grid" id="concertsGrid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section id="news">
+    <div class="container">
+      <div class="section-head">
+        <h2>News & Interviews</h2>
+        <span class="muted">Clips play in-page — mobile friendly.</span>
+      </div>
+      <div class="news-grid" id="newsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ON AIR -->
+  <section id="onair">
+    <div class="container">
+      <div class="section-head">
+        <h2>On‑Air Lineup</h2>
+        <span class="muted">Weekly grid + show highlights</span>
+      </div>
+      <div class="grid">
+        <div class="panel">
+          <div class="schedule" id="scheduleGrid" aria-label="Weekly schedule"></div>
+        </div>
+        <div class="shows" id="showCards"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <span class="muted">We’d love to hear from you.</span>
+      </div>
+      <div class="grid">
+        <div class="panel">
+          <form name="contactForm" onsubmit="handleContact(event)">
+            <div class="row">
+              <div>
+                <label for="name">Name</label>
+                <input id="name" name="name" required placeholder="Your name" />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required placeholder="you@example.com" />
+              </div>
+            </div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="What’s up?"></textarea>
+            <div style="display:flex; gap:.6rem; align-items:center; margin-top:.6rem">
+              <button class="btn" type="submit">Send</button>
+              <span class="muted">or email <a href="mailto:info@coyote103.com">info@coyote103.com</a></span>
+            </div>
+          </form>
+        </div>
+        <div class="panel">
+          <h3>Visit / Call</h3>
+          <p>
+            790 London Rd, Sarnia, ON N7T 4Y1, Canada<br/>
+            <a href="tel:+12263492460">+1 (226) 349‑2460</a><br/>
+            <a href="mailto:info@coyote103.com">info@coyote103.com</a>
+          </p>
+          <iframe class="map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+            src="https://www.google.com/maps?q=790%20London%20Rd%2C%20Sarnia%2C%20ON%20N7T%204Y1&output=embed"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap">
+      <div>© <span id="year"></span> Coyote 103 • <a href="https://coyote103.com" target="_blank" rel="noopener">coyote103.com</a></div>
+      <div>Home • Concert Listings • News • On‑Air Lineup • Contact</div>
+    </div>
+  </footer>
+
+  <!-- Sticky Player -->
+  <div class="player" role="region" aria-label="Audio player">
+    <button class="btn" id="playToggle">▶︎ Play</button>
+    <div class="now" id="nowPlaying">Off‑air — tap Listen Live</div>
+    <input id="volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume" />
+    <audio id="stream" crossorigin="anonymous"></audio>
+  </div>
+  <div class="listen-fab"><button class="btn" id="fabListen">▶︎ Listen Live</button></div>
+
+  <script>
+    // ======== DATA (using specific Unsplash photo IDs to avoid randomization issues) ========
+    const STREAM_URL = "https://ice1.somafm.com/groovesalad-128-mp3";
+
+    const rotatorCards = [
+      { title: "Top 10", desc: "This week’s hottest country in Sarnia.", link: "#top10" },
+      { title: "Concerts", desc: "What’s on — grab your tickets.", link: "#concerts" },
+      { title: "News", desc: "Interviews & local stories.", link: "#news" },
+      { title: "On‑Air", desc: "Your hosts & weekend shows.", link: "#onair" },
+    ];
+
+    // Album/cover-like images
+    const chart = [
+      { title: "Song One", artist: "Artist A", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Two", artist: "Artist B", cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Three", artist: "Artist C", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Five", artist: "Artist E", cover: "https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Six", artist: "Artist F", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Seven", artist: "Artist G", cover: "https://images.unsplash.com/photo-1464852045489-bccb7d17fe39?q=80&w=800&auto=format&fit=crop" },
+      { title: "Song Nine", artist: "Artist I", cover: "https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=800&auto=format&fit=crop" },
+    ];
+
+    // Concert cards
+    const concerts = [
+      { artist:"Tenille Townes", date:"2025-09-12", venue:"Imperial Theatre", img:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
+      { artist:"Dallas Smith", date:"2025-10-03", venue:"Progressive Auto Sales Arena", img:"https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
+      { artist:"Jess Moskaluke", date:"2025-11-08", venue:"Imperial Theatre", img:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
+      { artist:"Local Showcase", date:"2025-08-30", venue:"Refined Fool Sarnia", img:"https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
+    ];
+
+    // News cards (thematic images)
+    const news = [
+      { title:"Maxime Bernier Interview", tags:["Politics","Local"], img:"https://images.unsplash.com/photo-1482442120256-9c03866de390?q=80&w=1200&auto=format&fit=crop", mp3:"", url:"https://coyote103.com" },
+      { title:"Marilyn Gladu Talks Parliament", tags:["Politics","Local"], img:"https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop", mp3:"", url:"https://coyote103.com" },
+      { title:"Brian Everaert on Conservation", tags:["Local"], img:"https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=1200&auto=format&fit=crop", mp3:"", url:"https://coyote103.com" },
+    ];
+
+    const shows = [
+      { name:"Monty in the Morning", slot:"Weekdays 8am–12pm", desc:"Start your day with Monty.", when:["Mon","Tue","Wed","Thu","Fri"], time:"08:00-12:00" },
+      { name:"Country Gold (Daryl MacLean)", slot:"Sundays 7–11pm", desc:"Classic hits and stories.", when:["Sun"], time:"19:00-23:00" },
+      { name:"In The Country (Dave Woods)", slot:"Saturdays at Noon", desc:"Interviews & songs.", when:["Sat"], time:"12:00-13:00" },
+      { name:"Canadian Indie Country Countdown (Walter Scott James)", slot:"Saturdays 1pm ET", desc:"Indie spotlight.", when:["Sat"], time:"13:00-14:00" },
+      { name:"Knights of the Squared Circle (Ryan Knight)", slot:"Sundays 12 Noon", desc:"Wrestling talk.", when:["Sun"], time:"12:00-13:00" },
+      { name:"Rockin’ Canadian Country (Walter Scott James)", slot:"Fridays 8–10pm", desc:"All‑Canadian block.", when:["Fri"], time:"20:00-22:00" },
+    ];
+
+    // ======== UTIL ========
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => [...document.querySelectorAll(sel)];
+
+    function formatDate(iso){
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString(undefined,{ year:'numeric', month:'short', day:'numeric'});
+    }
+    function monthKey(iso){
+      const d = new Date(iso + 'T00:00:00');
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    }
+
+    // ======== HERO ROTATOR ========
+    function renderRotator(){
+      const rot = document.getElementById('rotator');
+      rot.innerHTML = rotatorCards.map(c=>`
+        <a class="rot-card" href="${c.link}">
+          <div class="rot-title"><span class="dot"></span> ${c.title}</div>
+          <div class="rot-desc">${c.desc}</div>
+        </a>
+      `).join('');
+      let i = 0; setInterval(()=>{
+        const cards = rot.children; if(!cards.length) return; $$(".rot-card").forEach(x=>x.style.outline='none');
+        const el = cards[i % cards.length]; el.style.outline = `2px solid var(--accent)`; el.style.outlineOffset = '2px';
+        i++;
+      }, 2400);
+    }
+
+    // ======== TOP 10 ========
+    function renderChart(){
+      const now = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      document.getElementById('chartDate').textContent = `As of ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+      const grid = document.getElementById('chartGrid');
+      grid.innerHTML = chart.map((c, idx)=>`
+        <div class="chart-card">
+          <img loading="lazy" src="${c.cover}" alt="Cover art for ${c.title} by ${c.artist}" />
+          <div class="chart-meta">
+            <div class="rank">#${idx+1}</div>
+            <div class="title">${c.title}</div>
+            <div class="artist">${c.artist}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ======== CONCERTS + FILTERS ========
+    function renderConcerts(){
+      concerts.sort((a,b)=> new Date(a.date) - new Date(b.date));
+
+      const months = Array.from(new Set(concerts.map(c=>monthKey(c.date))));
+      const venues = Array.from(new Set(concerts.map(c=>c.venue)));
+      const monthSel = document.getElementById('monthFilter');
+      const venueSel = document.getElementById('venueFilter');
+
+      monthSel.innerHTML = `<option value="">All months</option>` + months.map(m=>{
+        const label = new Date(`${m}-01T00:00:00`).toLocaleDateString(undefined,{month:'long', year:'numeric'});
+        return `<option value="${m}">${label}</option>`
+      }).join('');
+      venueSel.innerHTML = `<option value="">All venues</option>` + venues.map(v=>`<option value="${v}">${v}</option>`).join('');
+
+      function draw(){
+        const m = monthSel.value; const v = venueSel.value;
+        const list = concerts.filter(c=> (m? monthKey(c.date)===m : true) && (v? c.venue===v : true));
+        const grid = document.getElementById('concertsGrid');
+        grid.innerHTML = list.map(c=>`
+          <article class="concert-card" data-month="${monthKey(c.date)}" data-venue="${c.venue}">
+            <img loading="lazy" src="${c.img}" alt="${c.artist} live" />
+            <div class="concert-body">
+              <div class="date">${formatDate(c.date)}</div>
+              <h3>${c.artist}</h3>
+              <div class="venue">${c.venue}</div>
+              <a class="buy" href="${c.url}" target="_blank" rel="noopener">Get Tickets</a>
+            </div>
+          </article>
+        `).join('');
+      }
+      draw();
+      monthSel.addEventListener('change', draw);
+      venueSel.addEventListener('change', draw);
+      document.getElementById('clearFilters').addEventListener('click', ()=>{ monthSel.value=''; venueSel.value=''; draw(); });
+    }
+
+    // ======== NEWS ========
+    function renderNews(){
+      const grid = document.getElementById('newsGrid');
+      grid.innerHTML = news.map(n=>`
+        <article class="news-card">
+          <img loading="lazy" src="${n.img}" alt="${n.title}" />
+          <div class="news-body">
+            <h3>${n.title}</h3>
+            <div class="tags">${n.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+            <audio controls preload="none" style="width:100%">
+              <source src="${n.mp3}" type="audio/mpeg" />
+            </audio>
+            <p><a href="${n.url}" target="_blank" rel="noopener">Read more</a></p>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // ======== ON-AIR SCHEDULE ========
+    function renderOnAir(){
+      const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const sched = Object.fromEntries(days.map(d=>[d, []]));
+      shows.forEach(s=>{ s.when.forEach(d=> sched[d].push(s)); });
+
+      const grid = document.getElementById('scheduleGrid');
+      grid.innerHTML = days.map(d=>{
+        const items = sched[d].sort((a,b)=> a.time.localeCompare(b.time));
+        return `<div class="day"><h4>${d}</h4>${items.map(it=>`<div class=\"slot\"><strong>${it.name.split(' ')[0]}</strong><br><span style=\"color:var(--muted)\">${it.time.replace(':00','').replace(':00','')}</span></div>`).join('') || `<div class=\"slot\">—</div>`}</div>`;
+      }).join('');
+
+      const cards = document.getElementById('showCards');
+      cards.innerHTML = shows.map(s=>`
+        <article class="show-card">
+          <h3>${s.name}</h3>
+          <div class="muted">${s.slot}</div>
+          <p style="margin:.4rem 0 0">${s.desc}</p>
+        </article>
+      `).join('');
+    }
+
+    // ======== PLAYER ========
+    const audio = document.getElementById('stream');
+    const nowEl = document.getElementById('nowPlaying');
+    const playBtn = document.getElementById('playToggle');
+
+    function setStream(){
+      if(!audio.src){
+        if(STREAM_URL){ audio.src = STREAM_URL; }
+        else { // fallback demo tone so the UI works before real stream is wired
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=440; // A4
+          const gain = ctx.createGain(); gain.gain.value=.02; osc.connect(gain).connect(ctx.destination); osc.start(); setTimeout(()=>osc.stop(), 1500);
+          nowEl.textContent = 'Set STREAM_URL in the code to enable live audio.'; return;
+        }
+      }
+    }
+
+    async function togglePlay(){
+      setStream();
+      if(!audio.src) return;
+      if(audio.paused){
+        try{ await audio.play(); playBtn.textContent = '⏸ Pause'; nowEl.textContent = 'Coyote 103 — Live Stream'; }
+        catch(err){ nowEl.textContent = 'Autoplay blocked — press Play again.'; }
+      } else {
+        audio.pause(); playBtn.textContent = '▶︎ Play'; nowEl.textContent = 'Paused';
+      }
+    }
+
+    document.getElementById('heroListen').addEventListener('click', togglePlay);
+    document.getElementById('fabListen').addEventListener('click', togglePlay);
+    playBtn.addEventListener('click', togglePlay);
+    document.getElementById('volume').addEventListener('input', e=> audio.volume = e.target.value);
+
+    // ======== CONTACT FORM ========
+    function handleContact(e){
+      e.preventDefault();
+      const form = e.target; const data = new FormData(form);
+      const name = data.get('name'); const email = data.get('email'); const message = data.get('message');
+      const mail = `mailto:info@coyote103.com?subject=${encodeURIComponent('Contact from '+name)}&body=${encodeURIComponent(message+"\n\nFrom: "+name+" <"+email+">")}`;
+      window.location.href = mail;
+    }
+
+    // ======== INIT ========
+    function init(){
+      renderRotator();
+      renderChart();
+      renderConcerts();
+      renderNews();
+      renderOnAir();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Smooth scrolling
+    $$('#siteNav a').forEach(a=> a.addEventListener('click', e=>{
+      e.preventDefault(); document.getElementById('siteNav').classList.remove('open');
+      const id = a.getAttribute('href').slice(1); const el = document.getElementById(id);
+      if(el){ window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' }); }
+    }));
+  </script>
+</body>
+</html>
