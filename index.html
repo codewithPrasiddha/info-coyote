@@ -9,22 +9,26 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#0f1115;           /* deep slate */
-      --panel:#151924;        /* card surface */
-      --muted:#a7b0c0;        /* text muted */
-      --text:#eaf0ff;         /* text bright */
-      --accent:#ff9a1f;       /* coyote orange */
-      --accent-2:#27c2a8;     /* teal pop */
-      --border:#232838;       /* subtle borders */
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-    }
+:root {
+  --bg:#0f1115;           /* deep slate */
+  --panel:#151924;        /* card surface */
+  --muted:#a7b0c0;        /* text muted */
+  --text:#eaf0ff;         /* text bright */
+
+  --accent:#A63446;       /* logo maroon */
+  --accent-2:#A63446;     /* fallback, same maroon */
+
+  --border:#232838;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+}
+
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; background:radial-gradient(1000px 600px at 120% -10%, rgba(255,154,31,.08), transparent),
-                         radial-gradient(900px 500px at -10% 0%, rgba(39,194,168,.06), transparent),
+      margin:0; background:radial-gradient(1000px 600px at 120% -10%, rgba(255,194,46,.08), transparent),
+                         radial-gradient(900px 500px at -10% 0%, rgba(163,58,74,.06), transparent),
                          var(--bg);
       color:var(--text); font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto; letter-spacing:.2px;
     }
@@ -39,14 +43,17 @@
     header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--border); background:rgba(15,17,21,.7)}
     .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 0}
     .brand{display:flex; align-items:center; gap:.8rem; text-decoration:none}
-    .logo{
-      width:44px; height:44px; border-radius:12px; background:
-        conic-gradient(from 210deg at 70% 30%, rgba(255,154,31,.4), transparent 30%),
-        conic-gradient(from 40deg at 20% 80%, rgba(39,194,168,.35), transparent 40%),
-        linear-gradient(145deg, #1b1f2a, #0c0e12);
-      border:1px solid var(--border); box-shadow:var(--shadow); position:relative; overflow:hidden;
+    /* === LOGO ELEMENT UPDATED TO USE logo.png === */
+   .logo{
+     height:60px; width:auto; object-fit:contain;
+    padding:6px; /* space around logo */
+    background:#fff; /* white background so outline shows */
+    border-radius:12px;
+    border:1px solid var(--border);
+    box-shadow:var(--shadow);
     }
-    .logo::after{content:""; position:absolute; inset:6px; border-radius:10px; border:1px solid #2b3145}
+  
+    .logo::after{display:none}
     .brand-name{font:800 1.1rem/1 Barlow; letter-spacing:.6px; color:var(--text)}
     .brand-sub{display:block; font:600 .7rem/1 Barlow; color:var(--muted); opacity:.9; margin-top:.2rem}
     nav ul{list-style:none; display:flex; gap:.6rem; margin:0; padding:0; align-items:center}
@@ -59,16 +66,24 @@
     .hero-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:2.2rem; align-items:center; padding:clamp(1.2rem, 3vw, 2rem) 0}
     .hero-visual{
       position:relative; min-height:360px; border-radius:var(--radius);
-      background:linear-gradient(120deg, rgba(255,154,31,.15), rgba(39,194,168,.1)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
+      background:linear-gradient(120deg, rgba(255,194,46,.15), rgba(163,58,74,.1)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
       box-shadow:var(--shadow); border:1px solid var(--border);
     }
     .hero-visual::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%) }
     .listen-cta{display:flex; gap:1rem; flex-wrap:wrap; align-items:center}
-    .btn{
-      appearance:none; border:none; padding:.9rem 1.1rem; border-radius:14px; cursor:pointer;
-      font:700 .95rem/1 Barlow; letter-spacing:.4px; color:#0a0c10; background:linear-gradient(170deg, var(--accent), #ff7b00);
-      box-shadow:0 8px 18px rgba(255,154,31,.35), inset 0 1px 0 rgba(255,255,255,.35)
-    }
+.btn {
+  appearance:none;
+  border:none;
+  padding:.9rem 1.1rem;
+  border-radius:14px;
+  cursor:pointer;
+  font:700 .95rem/1 Barlow;
+  letter-spacing:.4px;
+  color:#fff;
+  background:linear-gradient(170deg, var(--accent), #7a2534); /* maroon shades */
+  box-shadow:0 8px 18px rgba(166,52,70,.35), inset 0 1px 0 rgba(255,255,255,.2);
+}
+
     .btn.secondary{color:var(--text); background:linear-gradient(170deg, #232a3b, #191e2b); border:1px solid #2a3042}
     .cta-sub{color:var(--muted); font-size:.95rem}
 
@@ -141,7 +156,7 @@
 
     /* Floating Listen Live */
     .listen-fab{position:fixed; right:16px; bottom:90px; z-index:61}
-    .listen-fab .btn{box-shadow:0 14px 30px rgba(255,154,31,.35)}
+    .listen-fab .btn{box-shadow:0 14px 30px rgba(255,194,46,.35)}
 
     /* Responsive */
     @media (max-width: 980px){
@@ -160,11 +175,8 @@
   <header>
     <div class="container nav">
       <a class="brand" href="#home" aria-label="Coyote 103 Home">
-        <div class="logo" aria-hidden="true"></div>
-        <div>
-          <span class="brand-name">Coyote 103</span>
-          <span class="brand-sub">Sarnia’s Country</span>
-        </div>
+        <!-- swapped decorative box for the actual site logo -->
+        <img class="logo" src="logo.png" alt="Coyote 103 logo" />
       </a>
       <nav id="siteNav">
         <button class="hamburger" aria-label="Toggle menu" onclick="document.getElementById('siteNav').classList.toggle('open')">☰</button>
@@ -184,7 +196,7 @@
     <div class="container hero-wrap">
       <div>
         <h1>Turn it up. <span style="color:var(--accent)">Listen live</span> to Sarnia’s Country.</h1>
-        <p class="cta-sub">Hit the orange button to start the stream. Explore the Top 10, concerts around town, fresh interviews, and our weekly lineup.</p>
+        <p class="cta-sub">Hit the gold button to start the stream. Explore the Top 10, concerts around town, fresh interviews, and our weekly lineup.</p>
         <div class="listen-cta">
           <button class="btn" id="heroListen">▶︎ Listen Live</button>
           <a class="btn secondary" href="#top10">See Top 10</a>
