@@ -21,164 +21,195 @@
   --border:#232838;
   --shadow:0 10px 30px rgba(0,0,0,.35);
   --radius:18px;
+
+  /* dynamic player height used to push page content so the fixed player never overlaps */
+  --player-h: 96px; /* JS updates this on load/resize; sensible default */
 }
 
-a {
-  text-decoration: none;
+*{box-sizing:border-box}
+html,body{height:100%; min-height:100%}
+body{
+  margin:0; background:radial-gradient(1000px 600px at 120% -10%, rgba(255,194,46,.08), transparent),
+                       radial-gradient(900px 500px at -10% 0%, rgba(163,58,74,.06), transparent),
+                       var(--bg);
+  color:var(--text); font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto; letter-spacing:.2px;
+  /* reserve space at the bottom equal to the fixed player height so nothing sits under it */
+  padding-bottom: calc(var(--player-h) + max(16px, env(safe-area-inset-bottom)));
 }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:radial-gradient(1000px 600px at 120% -10%, rgba(255,194,46,.08), transparent),
-                         radial-gradient(900px 500px at -10% 0%, rgba(163,58,74,.06), transparent),
-                         var(--bg);
-      color:var(--text); font:16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto; letter-spacing:.2px;
-    }
-    h1,h2,h3{font-family:Barlow, Inter, system-ui; letter-spacing:.4px}
-    h1{font-size:clamp(2.2rem, 4vw + .5rem, 4rem); margin:.2rem 0}
-    h2{font-size:clamp(1.4rem, 1.6vw + .5rem, 2rem); margin:0 0 1rem}
-    h3{font-size:1.1rem; margin:.6rem 0}
-    a{color:var(--accent)}
-    .container{width:min(1200px, 92%); margin-inline:auto}
+h1,h2,h3{font-family:Barlow, Inter, system-ui; letter-spacing:.4px}
+h1{font-size:clamp(2.2rem, 4vw + .5rem, 4rem); margin:.2rem 0}
+h2{font-size:clamp(1.4rem, 1.6vw + .5rem, 2rem); margin:0 0 1rem}
+h3{font-size:1.1rem; margin:.6rem 0}
+a{color:var(--accent); text-decoration:none}
+.container{width:min(1200px, 92%); margin-inline:auto}
 
-    /* Header / Nav */
-    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--border); background:rgba(15,17,21,.7)}
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 0}
-    .brand{display:flex; align-items:center; gap:.8rem; text-decoration:none}
-    /* === LOGO ELEMENT UPDATED TO USE logo.png === */
-   .logo{
-     height:60px; width:auto; object-fit:contain;
-    padding:6px; /* space around logo */
-    background:#fff; /* white background so outline shows */
-    border-radius:12px;
-    border:1px solid var(--border);
-    box-shadow:var(--shadow);
-    }
-  
-    .logo::after{display:none}
-    .brand-name{font:800 1.1rem/1 Barlow; letter-spacing:.6px; color:var(--text)}
-    .brand-sub{display:block; font:600 .7rem/1 Barlow; color:var(--muted); opacity:.9; margin-top:.2rem}
-    nav ul{list-style:none; display:flex; gap:.6rem; margin:0; padding:0; align-items:center}
-    nav a{display:inline-block; padding:.55rem .9rem; border-radius:999px; text-decoration:none; color:var(--text); border:1px solid transparent}
-    nav a:hover{background:#1a1f2b; border-color:#2a3042}
-    .hamburger{display:none; background:none; border:1px solid var(--border); border-radius:10px; padding:.5rem .6rem; color:var(--text)}
+/* Header / Nav */
+header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--border); background:rgba(15,17,21,.7)}
+.nav{display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.7rem 0}
+.brand{display:flex; align-items:center; gap:.8rem; text-decoration:none}
+.logo{ height:60px; width:auto; object-fit:contain; padding:6px; background:#fff; border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow) }
+.brand-name{font:800 1.1rem/1 Barlow; letter-spacing:.6px; color:var(--text)}
+.brand-sub{display:block; font:600 .7rem/1 Barlow; color:var(--muted); opacity:.9; margin-top:.2rem}
+nav ul{list-style:none; display:flex; gap:.6rem; margin:0; padding:0; align-items:center}
+nav a{display:inline-block; padding:.55rem .9rem; border-radius:999px; text-decoration:none; color:var(--text); border:1px solid transparent}
+nav a:hover{background:#1a1f2b; border-color:#2a3042}
+.hamburger{display:none; background:none; border:1px solid var(--border); border-radius:10px; padding:.5rem .6rem; color:var(--text)}
 
-    /* Hero */
-    .hero{position:relative; overflow:hidden; border-bottom:1px solid var(--border)}
-    .hero-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:2.2rem; align-items:center; padding:clamp(1.2rem, 3vw, 2rem) 0}
-    .hero-visual{
-      position:relative; min-height:360px; border-radius:var(--radius);
-      background:linear-gradient(120deg, rgba(255,194,46,.15), rgba(163,58,74,.1)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
-      box-shadow:var(--shadow); border:1px solid var(--border);
-    }
-    .hero-visual::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%) }
-    .listen-cta{display:flex; gap:1rem; flex-wrap:wrap; align-items:center}
-.btn {
-  appearance:none;
-  border:none;
-  padding:.9rem 1.1rem;
-  border-radius:14px;
-  cursor:pointer;
-  font:700 .95rem/1 Barlow;
-  letter-spacing:.4px;
-  color:#fff;
-  background:linear-gradient(170deg, var(--accent), #7a2534); /* maroon shades */
-  box-shadow:0 8px 18px rgba(166,52,70,.35), inset 0 1px 0 rgba(255,255,255,.2);
+/* Hero */
+.hero{position:relative; overflow:hidden; border-bottom:1px solid var(--border)}
+.hero-wrap{display:grid; grid-template-columns:1.2fr .8fr; gap:2.2rem; align-items:center; padding:clamp(1.2rem, 3vw, 2rem) 0}
+.hero-visual{
+  position:relative; min-height:360px; border-radius:var(--radius);
+  background:linear-gradient(120deg, rgba(255,194,46,.15), rgba(163,58,74,.1)), url('https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1974&auto=format&fit=crop') center/cover no-repeat;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+}
+.hero-visual::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.25), transparent 40%) }
+.listen-cta{display:flex; gap:1rem; flex-wrap:wrap; align-items:center}
+
+.btn { appearance:none; border:none; padding:.9rem 1.1rem; border-radius:14px; cursor:pointer; font:700 .95rem/1 Barlow; letter-spacing:.4px; color:#fff; background:linear-gradient(170deg, var(--accent), #7a2534); box-shadow:0 8px 18px rgba(166,52,70,.35), inset 0 1px 0 rgba(255,255,255,.2) }
+.btn.secondary{color:var(--text); background:linear-gradient(170deg, #232a3b, #191e2b); border:1px solid #2a3042}
+.cta-sub{color:var(--muted); font-size:.95rem}
+
+/* Rotating cards */
+.rotator{display:grid; gap:1rem; grid-template-columns:repeat(2,1fr)}
+.rot-card{background:linear-gradient(160deg, #192033, #121723); border:1px solid var(--border); border-radius:16px; padding:1rem; box-shadow:var(--shadow); position:relative}
+.rot-title{display:flex; align-items:center; gap:.6rem; font-weight:800; font-family:Barlow}
+.rot-title .dot{width:9px; height:9px; border-radius:50%; background:var(--accent)}
+.rot-desc{color:var(--muted); font-size:.95rem}
+
+/* Blocks */
+section{padding:clamp(2rem, 6vw, 4rem) 0}
+.panel{background:linear-gradient(170deg, #171b27, #121622); border:1px solid var(--border); border-radius:var(--radius); padding:clamp(1rem, 2vw, 1.5rem); box-shadow:var(--shadow)}
+.section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:1rem; flex-wrap:wrap}
+.section-head .muted{color:var(--muted); font-size:.95rem}
+
+/* Top 10 */
+.chart-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:1rem}
+.chart-card{position:relative; overflow:hidden; border-radius:16px; border:1px solid var(--border); background:#0e121a}
+.chart-card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block}
+.chart-meta{padding:.7rem}
+.chart-meta .rank{font:800 .9rem/1 Barlow; color:var(--accent)}
+.chart-meta .title{font-weight:700}
+.chart-meta .artist{color:var(--muted); font-size:.9rem}
+
+/* Concerts */
+.filters{display:flex; gap:.6rem; flex-wrap:wrap}
+.filter{background:#161b28; border:1px solid var(--border); color:var(--text); padding:.5rem .8rem; border-radius:10px; cursor:pointer}
+.filter.active{background:#1e2638; border-color:#32405e}
+.concerts-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1rem}
+.concert-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420; position:relative}
+.concert-card img{width:100%; aspect-ratio:16/9; object-fit:cover}
+.concert-body{padding:1rem}
+.concert-body .date{font:800 .9rem/1 Barlow; color:var(--accent)}
+.concert-body .venue{color:var(--muted)}
+.concert-body .buy{display:inline-block; margin-top:.6rem; padding:.5rem .7rem; border:1px solid #334261; border-radius:10px; color:#fff; text-decoration:none}
+
+/* News */
+.news-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1rem}
+.news-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420; position:relative}
+.news-card img{width:100%; aspect-ratio:16/9; object-fit:cover}
+.news-body{padding:1rem}
+.tags{display:flex; gap:.4rem; flex-wrap:wrap; margin:.4rem 0}
+.tag{font:700 .7rem/1 Barlow; padding:.25rem .5rem; border-radius:999px; border:1px solid #2c3956; color:#c9d5f8}
+
+/* On-Air */
+.grid{display:grid; grid-template-columns:1.2fr .8fr; gap:1rem}
+.schedule{display:grid; grid-template-columns:repeat(7, 1fr); gap:.6rem}
+.day{background:#0f1420; border:1px solid var(--border); border-radius:12px; padding:.6rem}
+.day h4{margin:.2rem 0 .5rem; font-family:Barlow; font-size:.95rem}
+.slot{padding:.35rem .45rem; border-radius:8px; margin:.35rem 0; background:#171d2c; border:1px solid #283552}
+
+.shows{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:1rem}
+.show-card{border:1px solid var(--border); border-radius:16px; padding:1rem; background:#0f1420; position:relative}
+
+/* Contact */
+form .row{display:grid; grid-template-columns:repeat(2, 1fr); gap:.8rem}
+label{display:block; font-size:.9rem; color:#cfd7ee; margin:.3rem 0}
+input, textarea{width:100%; background:#0e1320; border:1px solid #2a3042; color:var(--text); padding:.7rem .8rem; border-radius:10px}
+textarea{min-height:120px}
+.map{border:0; width:100%; height:260px; border-radius:12px}
+
+/* Footer (ensure it can't be hidden by the sticky player) */
+footer{
+  border-top:1px solid var(--border);
+  background:#0c0f15;
+  padding:1.5rem 0;
+  color:var(--muted);
+  /* extra bottom padding so the last line is always visible */
+  padding-bottom: calc(1.5rem + var(--player-h) + max(16px, env(safe-area-inset-bottom)));
 }
 
-    .btn.secondary{color:var(--text); background:linear-gradient(170deg, #232a3b, #191e2b); border:1px solid #2a3042}
-    .cta-sub{color:var(--muted); font-size:.95rem}
+/* Sticky bottom player */
+.player{
+  position:fixed; left:50%; transform:translateX(-50%);
+  bottom: max(16px, env(safe-area-inset-bottom));
+  width:min(1000px, 96%);
+  background:linear-gradient(170deg, #141a28, #101521);
+  border:1px solid var(--border); border-radius:16px; padding:.6rem .8rem;
+  display:flex; align-items:center; gap:.8rem; z-index:61; box-shadow:var(--shadow);
+  flex-wrap:wrap; /* allow wrap on very small screens */
+}
+.player .btn{padding:.6rem .9rem}
+.player .now{flex:1 1 240px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#cbd7f7}
+#volume{flex:0 0 clamp(140px, 30vw, 220px)}
 
-    /* Rotating cards */
-    .rotator{display:grid; gap:1rem; grid-template-columns:repeat(2,1fr)}
-    .rot-card{background:linear-gradient(160deg, #192033, #121723); border:1px solid var(--border); border-radius:16px; padding:1rem; box-shadow:var(--shadow)}
-    .rot-title{display:flex; align-items:center; gap:.6rem; font-weight:800; font-family:Barlow}
-    .rot-title .dot{width:9px; height:9px; border-radius:50%; background:var(--accent)}
-    .rot-desc{color:var(--muted); font-size:.95rem}
+/* Make cards more noticeable across the site */
+.chart-card, .concert-card, .news-card, .show-card, .day, .slot, .panel, .rot-card{
+  background:linear-gradient(180deg,#182033,#101622);
+  border-color:#33415e;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+.chart-card, .concert-card, .news-card, .show-card, .rot-card{
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.chart-card:hover, .concert-card:hover, .news-card:hover, .show-card:hover, .rot-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 26px rgba(0,0,0,.5), 0 0 0 1px rgba(166,52,70,.25) inset;
+  border-color:#3e5a8f;
+}
+.chart-card:focus-visible, .concert-card:focus-visible, .news-card:focus-visible, .show-card:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px;
+}
 
-    /* Blocks */
-    section{padding:clamp(2rem, 6vw, 4rem) 0}
-    .panel{background:linear-gradient(170deg, #171b27, #121622); border:1px solid var(--border); border-radius:var(--radius); padding:clamp(1rem, 2vw, 1.5rem); box-shadow:var(--shadow)}
-    .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:1rem}
-    .section-head .muted{color:var(--muted); font-size:.95rem}
+/* Clickable overlay links for cards */
+.chart-card a.card-link,
+.concert-card a.card-link,
+.news-card a.card-link,
+.show-card a.card-link{
+  position:absolute; inset:0; z-index:1; text-indent:-9999px; overflow:hidden;
+}
 
-    /* Top 10 */
-    .chart-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:1rem}
-    .chart-card{position:relative; overflow:hidden; border-radius:16px; border:1px solid var(--border); background:#0e121a}
-    .chart-card img{width:100%; height:140px; object-fit:cover; display:block}
-    .chart-meta{padding:.7rem}
-    .chart-meta .rank{font:800 .9rem/1 Barlow; color:var(--accent)}
-    .chart-meta .title{font-weight:700}
-    .chart-meta .artist{color:var(--muted); font-size:.9rem}
+/* Responsive */
+@media (max-width: 980px){
+  .grid, .hero-wrap{grid-template-columns:1fr}
+  .rotator{grid-template-columns:1fr}
+  .schedule{grid-template-columns:repeat(3, 1fr)}
+  form .row{grid-template-columns:1fr}
+  nav ul{display:none}
+  .hamburger{display:block}
+  nav.open ul{display:flex; position:absolute; top:60px; right:2%; background:#0e1320; border:1px solid var(--border); border-radius:14px; padding:.4rem; flex-direction:column; box-shadow:var(--shadow); width:min(240px, 70vw);}
+  nav.open a{padding:.6rem 1rem}
+}
 
-    /* Concerts */
-    .filters{display:flex; gap:.6rem; flex-wrap:wrap}
-    .filter{background:#161b28; border:1px solid var(--border); color:var(--text); padding:.5rem .8rem; border-radius:10px; cursor:pointer}
-    .filter.active{background:#1e2638; border-color:#32405e}
-    .concerts-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:1rem}
-    .concert-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420}
-    .concert-card img{width:100%; height:160px; object-fit:cover}
-    .concert-body{padding:1rem}
-    .concert-body .date{font:800 .9rem/1 Barlow; color:var(--accent)}
-    .concert-body .venue{color:var(--muted)}
-    .concert-body .buy{display:inline-block; margin-top:.6rem; padding:.5rem .7rem; border:1px solid #334261; border-radius:10px; color:var(--text); text-decoration:none}
-
-    /* News */
-    .news-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:1rem}
-    .news-card{border:1px solid var(--border); border-radius:16px; overflow:hidden; background:#0f1420}
-    .news-card img{width:100%; height:180px; object-fit:cover}
-    .news-body{padding:1rem}
-    .tags{display:flex; gap:.4rem; flex-wrap:wrap; margin:.4rem 0}
-    .tag{font:700 .7rem/1 Barlow; padding:.25rem .5rem; border-radius:999px; border:1px solid #2c3956; color:#c9d5f8}
-
-    /* On-Air */
-    .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:1rem}
-    .schedule{display:grid; grid-template-columns:repeat(7, 1fr); gap:.6rem}
-    .day{background:#0f1420; border:1px solid var(--border); border-radius:12px; padding:.6rem}
-    .day h4{margin:.2rem 0 .5rem; font-family:Barlow; font-size:.95rem}
-    .slot{padding:.35rem .45rem; border-radius:8px; margin:.35rem 0; background:#171d2c; border:1px solid #283552}
-
-    .shows{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:1rem}
-    .show-card{border:1px solid var(--border); border-radius:16px; padding:1rem; background:#0f1420}
-
-    /* Contact */
-    form .row{display:grid; grid-template-columns:repeat(2, 1fr); gap:.8rem}
-    label{display:block; font-size:.9rem; color:#cfd7ee; margin:.3rem 0}
-    input, textarea{width:100%; background:#0e1320; border:1px solid #2a3042; color:var(--text); padding:.7rem .8rem; border-radius:10px}
-    textarea{min-height:120px}
-    .map{border:0; width:100%; height:260px; border-radius:12px}
-
-    /* Footer */
-    footer{border-top:1px solid var(--border); background:#0c0f15; padding:1.5rem 0; color:var(--muted)}
-
-    /* Sticky bottom player */
-    .player{position:fixed; left:50%; transform:translateX(-50%); bottom:16px; width:min(1000px, 96%); background:linear-gradient(170deg, #141a28, #101521); border:1px solid var(--border); border-radius:16px; padding:.6rem .8rem; display:flex; align-items:center; gap:.8rem; z-index:60; box-shadow:var(--shadow)}
-    .player .btn{padding:.6rem .9rem}
-    .player .now{flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#cbd7f7}
-
-    /* Floating Listen Live */
-    .listen-fab{position:fixed; right:16px; bottom:90px; z-index:61}
-    .listen-fab .btn{box-shadow:0 14px 30px rgba(255,194,46,.35)}
-
-    /* Responsive */
-    @media (max-width: 980px){
-      .grid, .hero-wrap{grid-template-columns:1fr}
-      .rotator{grid-template-columns:1fr}
-      .schedule{grid-template-columns:repeat(3, 1fr)}
-      form .row{grid-template-columns:1fr}
-      nav ul{display:none}
-      .hamburger{display:block}
-      nav.open ul{display:flex; position:absolute; top:60px; right:2%; background:#0e1320; border:1px solid var(--border); border-radius:14px; padding:.4rem; flex-direction:column; box-shadow:var(--shadow)}
-      nav.open a{padding:.6rem 1rem}
-    }
+/* mobile nicety: spacing + overlap fix */
+@media (max-width: 560px){
+  .logo{height:48px}
+  .player .now{order:3; flex:1 1 100%}
+  #volume{order:2}
+  /* extra spacing so Top 10 and player controls never crowd */
+  #top10{ margin-top: 16px; }
+  /* fix: rotator cards sit in flow, not absolute, to avoid colliding with CTA */
+  .hero-visual .rotator{ position:relative !important; inset:auto !important; margin-top:.75rem; }
+  .hero-visual{ min-height:420px; padding-bottom:.75rem; }
+  .listen-cta{ margin-bottom:.5rem; }
+}
   </style>
 </head>
 <body>
   <header>
     <div class="container nav">
       <a class="brand" href="#home" aria-label="Coyote 103 Home">
-        <!-- swapped decorative box for the actual site logo -->
         <img class="logo" src="logo.png" alt="Coyote 103 logo" />
       </a>
       <nav id="siteNav">
@@ -201,7 +232,7 @@ a {
         <h1>Turn it up. <span style="color:var(--accent)">Listen live</span> to Sarnia’s Country.</h1>
         <p class="cta-sub">Hit the gold button to start the stream. Explore the Top 10, concerts around town, fresh interviews, and our weekly lineup.</p>
         <div class="listen-cta">
-          <button class="btn" id="heroListen">▶︎ Listen Live</button>
+          <!-- "Listen Live" button removed per request -->
           <a class="btn secondary" href="#top10">See Top 10</a>
         </div>
       </div>
@@ -320,36 +351,38 @@ a {
 
   <!-- Sticky Player -->
   <div class="player" role="region" aria-label="Audio player">
-    <button class="btn" id="playToggle">▶︎ Play</button>
+    <!-- renamed to Listen Live -->
+    <button class="btn" id="playToggle">▶︎ Listen Live</button>
     <div class="now" id="nowPlaying">Off‑air — tap Listen Live</div>
     <input id="volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="Volume" />
     <audio id="stream" crossorigin="anonymous"></audio>
   </div>
-  <div class="listen-fab"><button class="btn" id="fabListen">▶︎ Listen Live</button></div>
 
   <script>
-    // ======== DATA (using specific Unsplash photo IDs to avoid randomization issues) ========
-    const STREAM_URL = "https://ice1.somafm.com/groovesalad-128-mp3";
+    // ======== CONFIG / DATA ========
+    const STREAM_URL = "https://ice1.somafm.com/groovesalad-128-mp3"; // TODO: replace with Coyote 103 stream
 
     const rotatorCards = [
-      { title: "Top 10", desc: "This week’s hottest country in Sarnia.", link: "#top10" },
-      { title: "Concerts", desc: "What’s on — grab your tickets.", link: "#concerts" },
-      { title: "News", desc: "Interviews & local stories.", link: "#news" },
-      { title: "On‑Air", desc: "Your hosts & weekend shows.", link: "#onair" },
+      { title: "Top 10",    desc: "This week’s hottest country in Sarnia.", link: "#top10" },
+      { title: "Concerts",  desc: "What’s on — grab your tickets.",       link: "#concerts" },
+      { title: "News",      desc: "Interviews & local stories.",          link: "#news" },
+      { title: "On‑Air",    desc: "Your hosts & weekend shows.",          link: "#onair" },
     ];
 
-    // Album/cover-like images
+    // Realistic Top 10 sample (replace with live data when ready)
     const chart = [
-      { title: "Song One", artist: "Artist A", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Two", artist: "Artist B", cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Three", artist: "Artist C", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Five", artist: "Artist E", cover: "https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Six", artist: "Artist F", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Seven", artist: "Artist G", cover: "https://images.unsplash.com/photo-1464852045489-bccb7d17fe39?q=80&w=800&auto=format&fit=crop" },
-      { title: "Song Nine", artist: "Artist I", cover: "https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=800&auto=format&fit=crop" },
+      { title: "Last Night", artist: "Morgan Wallen", cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop" },
+      { title: "Fast Car", artist: "Luke Combs", cover: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800&auto=format&fit=crop" },
+      { title: "Thinkin’ Bout Me", artist: "Morgan Wallen", cover: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop" },
+      { title: "Need a Favor", artist: "Jelly Roll", cover: "https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?q=80&w=800&auto=format&fit=crop" },
+      { title: "Next Thing You Know", artist: "Jordan Davis", cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop" },
+      { title: "Watermelon Moonshine", artist: "Lainey Wilson", cover: "https://images.unsplash.com/photo-1464852045489-bccb7d17fe39?q=80&w=800&auto=format&fit=crop" },
+      { title: "Dancin’ in the Country", artist: "Tyler Hubbard", cover: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=800&auto=format&fit=crop" },
+      { title: "Everything I Love", artist: "Morgan Wallen", cover: "https://images.unsplash.com/photo-1523540939399-141cbff6a8d9?q=80&w=800&auto=format&fit=crop" },
+      { title: "Rock and A Hard Place", artist: "Bailey Zimmerman", cover: "https://images.unsplash.com/photo-1513883049090-d0b7439799bf?q=80&w=800&auto=format&fit=crop" },
+      { title: "Wait in the Truck", artist: "HARDY feat. Lainey Wilson", cover: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=800&auto=format&fit=crop" },
     ];
 
-    // Concert cards
     const concerts = [
       { artist:"Tenille Townes", date:"2025-09-12", venue:"Imperial Theatre", img:"https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
       { artist:"Dallas Smith", date:"2025-10-03", venue:"Progressive Auto Sales Arena", img:"https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
@@ -357,7 +390,6 @@ a {
       { artist:"Local Showcase", date:"2025-08-30", venue:"Refined Fool Sarnia", img:"https://images.unsplash.com/photo-1523755231516-e43fd2e8dca5?q=80&w=1200&auto=format&fit=crop", url:"https://coyote103.com" },
     ];
 
-    // News cards (thematic images)
     const news = [
       { title:"Maxime Bernier Interview", tags:["Politics","Local"], img:"https://images.unsplash.com/photo-1482442120256-9c03866de390?q=80&w=1200&auto=format&fit=crop", mp3:"", url:"https://coyote103.com" },
       { title:"Marilyn Gladu Talks Parliament", tags:["Politics","Local"], img:"https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop", mp3:"", url:"https://coyote103.com" },
@@ -409,14 +441,15 @@ a {
       document.getElementById('chartDate').textContent = `As of ${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
       const grid = document.getElementById('chartGrid');
       grid.innerHTML = chart.map((c, idx)=>`
-        <div class="chart-card">
-          <img loading="lazy" src="${c.cover}" alt="Cover art for ${c.title} by ${c.artist}" />
+        <article class="chart-card">
+          <a class="card-link" href="#top10">${c.title}</a>
+          <img loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=800&auto=format&fit=crop';" src="${c.cover}" alt="Cover art for ${c.title} by ${c.artist}" />
           <div class="chart-meta">
             <div class="rank">#${idx+1}</div>
             <div class="title">${c.title}</div>
             <div class="artist">${c.artist}</div>
           </div>
-        </div>
+        </article>
       `).join('');
     }
 
@@ -440,8 +473,9 @@ a {
         const list = concerts.filter(c=> (m? monthKey(c.date)===m : true) && (v? c.venue===v : true));
         const grid = document.getElementById('concertsGrid');
         grid.innerHTML = list.map(c=>`
-          <article class="concert-card" data-month="${monthKey(c.date)}" data-venue="${c.venue}">
-            <img loading="lazy" src="${c.img}" alt="${c.artist} live" />
+          <article class="concert-card">
+            <a class="card-link" href="#concerts">${c.artist}</a>
+            <img loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=1200&auto=format&fit=crop';" src="${c.img}" alt="${c.artist} live" />
             <div class="concert-body">
               <div class="date">${formatDate(c.date)}</div>
               <h3>${c.artist}</h3>
@@ -462,10 +496,11 @@ a {
       const grid = document.getElementById('newsGrid');
       grid.innerHTML = news.map(n=>`
         <article class="news-card">
-          <img loading="lazy" src="${n.img}" alt="${n.title}" />
+          <a class="card-link" href="#news">${n.title}</a>
+          <img loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1529101091764-c3526daf38fe?q=80&w=1200&auto=format&fit=crop';" src="${n.img}" alt="${n.title}" />
           <div class="news-body">
             <h3>${n.title}</h3>
-            <div class="tags">${n.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+            <div class="tags">${n.tags.map(t=>`<span class=\"tag\">${t}</span>`).join('')}</div>
             <audio controls preload="none" style="width:100%">
               <source src="${n.mp3}" type="audio/mpeg" />
             </audio>
@@ -490,6 +525,7 @@ a {
       const cards = document.getElementById('showCards');
       cards.innerHTML = shows.map(s=>`
         <article class="show-card">
+          <a class="card-link" href="#onair">${s.name}</a>
           <h3>${s.name}</h3>
           <div class="muted">${s.slot}</div>
           <p style="margin:.4rem 0 0">${s.desc}</p>
@@ -505,7 +541,7 @@ a {
     function setStream(){
       if(!audio.src){
         if(STREAM_URL){ audio.src = STREAM_URL; }
-        else { // fallback demo tone so the UI works before real stream is wired
+        else {
           const ctx = new (window.AudioContext || window.webkitAudioContext)();
           const osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=440; // A4
           const gain = ctx.createGain(); gain.gain.value=.02; osc.connect(gain).connect(ctx.destination); osc.start(); setTimeout(()=>osc.stop(), 1500);
@@ -519,16 +555,19 @@ a {
       if(!audio.src) return;
       if(audio.paused){
         try{ await audio.play(); playBtn.textContent = '⏸ Pause'; nowEl.textContent = 'Coyote 103 — Live Stream'; }
-        catch(err){ nowEl.textContent = 'Autoplay blocked — press Play again.'; }
+        catch(err){ nowEl.textContent = 'Autoplay blocked — press Listen Live again.'; }
       } else {
-        audio.pause(); playBtn.textContent = '▶︎ Play'; nowEl.textContent = 'Paused';
+        audio.pause(); playBtn.textContent = '▶︎ Listen Live'; nowEl.textContent = 'Paused';
       }
     }
 
-    document.getElementById('heroListen').addEventListener('click', togglePlay);
-    document.getElementById('fabListen').addEventListener('click', togglePlay);
-    playBtn.addEventListener('click', togglePlay);
-    document.getElementById('volume').addEventListener('input', e=> audio.volume = e.target.value);
+    // keep content clear of the fixed player by measuring its height
+    function updatePlayerPadding(){
+      const p = document.querySelector('.player');
+      if(!p) return;
+      const h = p.offsetHeight; // includes wrapping on small screens
+      document.documentElement.style.setProperty('--player-h', h + 'px');
+    }
 
     // ======== CONTACT FORM ========
     function handleContact(e){
@@ -547,15 +586,29 @@ a {
       renderNews();
       renderOnAir();
       document.getElementById('year').textContent = new Date().getFullYear();
+      updatePlayerPadding();
+      playBtn.textContent = '▶︎ Listen Live';
     }
     document.addEventListener('DOMContentLoaded', init);
 
-    // Smooth scrolling
-    $$('#siteNav a').forEach(a=> a.addEventListener('click', e=>{
-      e.preventDefault(); document.getElementById('siteNav').classList.remove('open');
-      const id = a.getAttribute('href').slice(1); const el = document.getElementById(id);
-      if(el){ window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' }); }
-    }));
+    // EVENTS
+    window.addEventListener('resize', updatePlayerPadding);
+    playBtn.addEventListener('click', togglePlay);
+    document.getElementById('volume').addEventListener('input', e=> audio.volume = e.target.value);
+
+    // Smooth scrolling (applies to ALL in-page hash links, including rotator and card overlays)
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]');
+      if(!a) return;
+      const id = a.getAttribute('href').slice(1);
+      if(!id) return;
+      const el = document.getElementById(id);
+      if(el){
+        e.preventDefault();
+        document.getElementById('siteNav')?.classList?.remove('open');
+        window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+      }
+    });
   </script>
 </body>
 </html>
